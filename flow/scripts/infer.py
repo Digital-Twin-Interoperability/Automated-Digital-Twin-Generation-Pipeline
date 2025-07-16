@@ -157,28 +157,28 @@ for path in paths:
                 # each component uses a random color
                 part.visual.vertex_colors = get_random_color(j, use_float=True)
 
-            mesh = trimesh.Scene(parts)
-            # export the whole mesh
-            mesh.export(os.path.join(workspace, name + "_" + str(i) + ".glb"))
+            # mesh = trimesh.Scene(parts)
+            # # export the whole mesh
+            # mesh.export(os.path.join(workspace, name + "_" + str(i) + ".glb"))
 
             # export each part
             for j, part in enumerate(parts):
-                part.export(os.path.join(workspace, name + "_" + str(i) + "_part" + str(j) + ".glb"))
-
+                # part.export(os.path.join(workspace, name + "_" + str(i) + "_part" + str(j) + ".glb"))
+                part.export(os.path.join(workspace, name + "_" + str(i) + f"_part{j}.ply")) # added 7/15 to try and export each part as a ply file
             # export dual volumes
-            mesh_part0.export(os.path.join(workspace, name + "_" + str(i) + "_vol0.glb"))
-            mesh_part1.export(os.path.join(workspace, name + "_" + str(i) + "_vol1.glb"))
+            # mesh_part0.export(os.path.join(workspace, name + "_" + str(i) + "_vol0.glb"))
+            # mesh_part1.export(os.path.join(workspace, name + "_" + str(i) + "_vol1.glb"))
 
-        else:
-            data = {"latent": latent}
+        # else:
+        #     data = {"latent": latent}
 
-            with torch.inference_mode():
-                results = model.vae(data, resolution=args.grid_res)
+        #     with torch.inference_mode():
+        #         results = model.vae(data, resolution=args.grid_res)
 
-            vertices, faces = results["meshes"][0]
-            mesh = trimesh.Trimesh(vertices, faces)
-            mesh = postprocess_mesh(mesh, args.num_faces)
+        #     vertices, faces = results["meshes"][0]
+        #     mesh = trimesh.Trimesh(vertices, faces)
+        #     mesh = postprocess_mesh(mesh, args.num_faces)
 
-            # kiui.lo(mesh.vertices, mesh.faces)
-            mesh.vertices = mesh.vertices @ TRIMESH_GLB_EXPORT.T
-            mesh.export(os.path.join(workspace, name + "_" + str(i) + ".glb"))
+        #     # kiui.lo(mesh.vertices, mesh.faces)
+        #     mesh.vertices = mesh.vertices @ TRIMESH_GLB_EXPORT.T
+        #     mesh.export(os.path.join(workspace, name + "_" + str(i) + ".glb"))
