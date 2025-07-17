@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="CAD-Coder">
+  <meta name="keywords" content="CAD-Coder, CAD, VLM">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CAD-Coder</title>
+
+  <style>
+      .arrow {
+        display: inline-block;
+        font-size: 40px; /* Adjust size as needed */
+        color: #555; /* Arrow color */
+        margin: 0 15px; /* Spacing around the arrow */
+      }
+
+      .arrow::before {
+        content: "\27A4"; /* Unicode character for a rightwards arrow with a triangle arrowhead */
+      }
+
+      .columns {
+      display: flex;
+      gap: 5px; /* Small gap between columns */
+      justify-content: center;
+      align-items: center;
+    }
+
+    .stl-viewer {
+      width: 100%;
+      max-width: 300px; /* Limit maximum width */
+      height: auto; /* Maintain aspect ratio */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin: 0 auto; /* Center the element */
+    }
+
+    model-viewer {
+      width: 100%; /* Make the 3D model viewer responsive */
+      height: auto; /* Maintain aspect ratio */
+    }
+
+  </style>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/icon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://ferdous-alam.github.io/">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">CAD-Coder: An Open-Source Vision-Language Model for Computer-Aided Design Code Generation
+            </h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://anniedoris.github.io/">Anna C. Doris</a><sup>1</sup>,</span>
+              <span class="author-block">
+            <a href="https://decode.mit.edu/">Md Ferdous Alam</a><sup>1</sup></span>
+            <span class="author-block">
+            <a href="https://decode.mit.edu/">Amin Heyrani Nobari</a><sup>1</sup></span>
+            <span class="author-block">
+              <a href="https://decode.mit.edu/">Faez Ahmed</a><sup>1</sup></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Massachusetts Institute of Technology</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <!-- <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span> -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2505.14646"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/anniedoris/CAD-Coder"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="https://huggingface.co/datasets/CADCODER/GenCAD-Code"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+              </span>
+              <!-- Model Link. -->
+              <span class="link-block">
+                <a href="https://huggingface.co/CADCODER/CAD-Coder"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fa-solid fa-robot"></i>
+                  </span>
+                  <span>Model</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body" style="text-align: center; display: flex; align-items: center; justify-content: center;">
+
+      <!-- Image Teaser -->
+      <div class="teaser-image" style="display: inline-block;">
+        <img src="./static/images/403.png" alt="Teaser Image" style="width: 150px; height: auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+      </div>
+
+      <!-- Unicode Arrow to GenCAD Box -->
+      <div class="arrow-container" style="display: flex; align-items: center; margin: 0 5px;">
+        <span class="arrow"></span>
+      </div>
+
+      <!-- GenCAD Box -->
+      <div class="gencad-box" style="display: inline-flex; align-items: center; justify-content: center; border-radius: 20px; background-color: rgb(187, 181, 181); width: 300px; height: 100px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 0 5px;">
+        <h3 style="color: black; font-size: 36px; font-weight: bold; margin: 0;">GenCAD</h3>
+      </div>
+
+      <!-- Unicode Arrow to GenCAD Box -->
+      <div class="arrow-container" style="display: flex; align-items: center; margin: 0 5px;">
+        <span class="arrow"></span>
+      </div>
+
+      <!-- STL Viewer -->
+      <div class="stl-viewer" style="display: inline-block; width: 300px; height: 300px; border: 1px solid #ddd; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <model-viewer src="./static/mesh/403.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 100%; height: 100%;">
+        </model-viewer>
+      </div>
+
+    </div>
+    <h2 class="subtitle has-text-centered" style="margin-top: 20px;">
+      <span class="dnerf">GenCAD</span> demonstrates AI-based generative CAD models. Interact with the model above.
+    </h2>
+  </div>
+</section>
+
+<!-- Add this script to include the model-viewer library -->
+<script type="module" src="https://unpkg.com/@google/model-viewer@v1.9.2/dist/model-viewer.min.js"></script>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            We present GenCAD, an image-conditional CAD generation model. Our model not only generates the 3D CAD but also the 
+            entire parameterized CAD command history, CAD program, as output.  
+          </p>
+          <p>
+            The complexity of CAD data structures such as boundary representation (B-rep) makes it difficult to train efficient
+            AI models. Due to the ease of data availability, common approaches often resort to representations
+            like meshes, voxels, or point clouds, which sacrifice the accuracy and modifiability of true CAD
+            models that are critical for engineering tasks, manufacturing and design space exploration. Here we
+            propose GenCAD, an image conditional generative model that generates parametric CAD command
+            sequences, also known as CAD programs, that can be converted to a 3D solid model using a geometry
+            kernel. At the core of GenCAD, we develop a strong representation learning framework for multiple
+            modalities of computational engineering designs. 
+          </p>
+          <p>
+            Our proposed <span class="dnerf">GenCAD</span> architecture is a combination of four critical steps; 1) an autoregressive transformer encoder is used for learning the latent representation
+            of the CAD command sequences, 2) a contrastive learning-based model is used to learn the joint
+            representations of the latent spaces between CAD command sequences and CAD-images, 3) a latent
+            diffusion model that can generate the latent representation of CAD command sequences conditioned
+            on CAD-images, and 4) finally, a decoder model that can convert cad latents into a sequence of
+            parametric CAD commands. Most importantly, GenCAD does not merely generate a 3D solid but also the entire CAD program. Our work represents a step forward in CAD, offering more precise and
+            modifiable 3D modeling from images, potentially enhancing automated design processes.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="static/videos/teaser.mp4"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+  
+    <!-- Animation. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+
+        <h2 class="title is-3">CAD generation</h2>
+
+        <!-- Image-conditional CAD -->
+        <h3 class="title is-4">Image-conditional CAD generation</h3>
+        <div class="content has-text-justified">
+          <p>
+            Using <span class="dnerf">GenCAD</span>, you can create CAD models from image renderings.
+          </p>
+        </div>
+
+        <div class="columns is-vcentered is-mobile is-gapless"> <!-- Added is-gapless class -->
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <img src="./static/images/289.png" alt="Teaser Image" style="width: 150px; height: auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          </div>
+        
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <img src="./static/images/198.png" alt="Teaser Image" style="width: 150px; height: auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          </div>
+        
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <img src="./static/images/386.png" alt="Teaser Image" style="width: 150px; height: auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          </div>
+        
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <img src="./static/images/390.png" alt="Teaser Image" style="width: 150px; height: auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          </div>
+        </div>
+
+
+        <div class="columns is-vcentered is-mobile is-gapless">
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/289.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+        
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/198.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+        
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/386.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+        
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/390.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+        </div>
+
+
+        <!-- Image-conditional CAD -->
+        <h3 class="title is-4">Sample diversity of GenCAD</h3>
+        <div class="content has-text-justified">
+          <p>
+            Using <span class="dnerf">GenCAD</span>, you can get multiple CAD samples for the same image input.
+          </p>
+        </div>
+
+        <div class="columns is-vcentered is-mobile is-gapless">
+
+          <!-- sample diversity 1 -->
+          <div class="teaser-image" style="display: inline-block;">
+            <img src="./static/images/sample_diversity_1.png" alt="Teaser Image" style="width: 150px; height: auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          </div>
+
+          <!-- Unicode Arrow to GenCAD Box -->
+          <div class="arrow-container" style="display: flex; align-items: center; margin: 0 5px;">
+            <span class="arrow"></span>
+          </div>
+
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/sample_diversity_1_1.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/sample_diversity_1_2.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+
+
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/sample_diversity_1_3.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+        </div>
+
+
+
+        <div class="columns is-vcentered is-mobile is-gapless">
+
+          <!-- sample diversity 2 -->
+          <div class="teaser-image" style="display: inline-block;">
+            <img src="./static/images/sample_diversity_2.png" alt="Teaser Image" style="width: 150px; height: auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          </div>
+
+          <!-- Unicode Arrow to GenCAD Box -->
+          <div class="arrow-container" style="display: flex; align-items: center; margin: 0 5px;">
+            <span class="arrow"></span>
+          </div>
+
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/sample_diversity_2_1.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/sample_diversity_2_2.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+
+
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/sample_diversity_2_3.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+        </div>
+
+
+      </div>      
+    </div>
+
+
+
+    <!-- Retrieval. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">CAD retrieval</h2>
+
+        <!-- Retrieval -->
+        <h3 class="title is-4">Image-conditional CAD retrieval</h3>
+        <div class="content has-text-justified">
+          <p>
+            Next, we show the image-conditional CAD retrieval capabilities of GenCAD. Here we retrieve the top-3 CAD programs from a collection of ~7000 CAD programs.
+          </p>
+        </div>
+
+        <div class="columns is-vcentered is-mobile is-gapless">
+
+          <!-- retrieval 1 -->
+          <div class="teaser-image" style="display: inline-block;">
+            <img src="./static/images/retrieval_1.png" alt="Teaser Image" style="width: 150px; height: auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          </div>
+
+          <!-- Unicode Arrow to GenCAD Box -->
+          <div class="arrow-container" style="display: flex; align-items: center; margin: 0 5px;">
+            <span class="arrow"></span>
+          </div>
+
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/retrieval_1_1.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/retrieval_1_2.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+
+
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/retrieval_1_3.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+        </div>
+
+
+
+        <div class="columns is-vcentered is-mobile is-gapless">
+
+          <!-- retrieval 2 -->
+          <div class="teaser-image" style="display: inline-block;">
+            <img src="./static/images/retrieval_2.png" alt="Teaser Image" style="width: 150px; height: auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          </div>
+
+          <!-- Unicode Arrow to GenCAD Box -->
+          <div class="arrow-container" style="display: flex; align-items: center; margin: 0 5px;">
+            <span class="arrow"></span>
+          </div>
+
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/retrieval_2_1.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/retrieval_2_2.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+
+
+          <div class="column stl-viewer" style="display: flex; justify-content: center; padding: 0;">
+            <model-viewer src="./static/mesh/retrieval_2_3.glb" alt="3D Model" auto-rotate camera-controls ar shadow-intensity="1" style="width: 200px; height: 200px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            </model-viewer>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@misc{alam2025gencadimageconditionedcomputeraideddesign,
+      title={CAD-Coder: An Open-Source Vision-Language Model for Computer-Aided Design Code Generation}, 
+      author={Md Ferdous Alam and Faez Ahmed},
+      year={2025},
+      eprint={2409.16294},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2409.16294}, 
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link" href="https://github.com/ferdous-alam" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            template for this website is borrowed from <a
+              href="https://github.com/nerfies/nerfies.github.io">here</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
