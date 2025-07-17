@@ -100,13 +100,13 @@ unzip images.zip
 
 4. Run the phase 1 training script:
 ```
-./scripts/v1_5/pretrain.sh {your_checkpoint_save_root}
+./scripts/v1_5/phase1_cadcoder.sh {your_stage1_checkpoint_save_dir}
 ```
 
-The phase1 trained model will be saved to {your_checkpoint_save_root}/phase1_cadcoder. We used 4 H100 GPUs for this phase of training, and it took 4.5 hours. During training of the model, you can check that the training loss looks something like what we got (see below) by running the following command:
+The phase1 trained model will be saved to {your_stage1_checkpoint_save_dir}. We used 4 H100 GPUs for this phase of training, and it took 4.5 hours. During training of the model, you can check that the training loss looks something like what we got (see below) by running the following command:
 
 ```
-cd {your_checkpoint_save_root}/phase1_cadcoder
+cd {your_stage1_checkpoint_save_dir}
 tensorboard --logdir=runs
 ```
 
@@ -114,11 +114,56 @@ tensorboard --logdir=runs
 
 ### Phase 2 Training
 
-1. Download phase 2 GenCAD-Code training data from our website:
-TODO
+1. Download phase 2 GenCAD-Code training data:
+```
+cd $CADCODER_DATA_ROOT
+mkdir cadcoder_train_data
+huggingface-cli download CADCoder/GenCAD-Code cadquery_train_data_4096.json --repo-type=dataset --local-dir "${CADCODER_DATA_ROOT}/cadcoder_train_data"
+```
+
+Download GenCAD images from [this link](https://drive.google.com/file/d/1znREwbNBIyODLXRHmfHy5ar_ENSIFjG5/view?usp=drive_link) and unzip them in the "${CADCODER_DATA_ROOT}/cadcoder_train_data" directory. Rename the unzipped "images" directory to "gencad_im".
+
+2. Run the phase 2 training script:
+```
+./scripts/v1_5/phase2_cadcoder.sh {your_stage1_checkpoint_save_dir} {your_final_checkpoint_save_dir}
+```
+
+The final model will be saved to {your_final_checkpoint_save_dir}. We used 4 H100 GPUs for this phase of training, and it took 5.7 hours. During training of the model, you can check that the training loss looks something like what we got (see below) by running the following command:
+
+```
+cd {your_final_checkpoint_save_dir}
+tensorboard --logdir=runs
+```
+
+![CAD-Coder Phase 2 Training](docs_images/finetune_results.png)
+
+
 
 ## Release Todo List
 
 - [x] Release GenCADCode Dataset
 - [x] Release CAD-Coder and variants on HF
-- [ ] Release Training Code
+- [x] Release Training Code
+
+## Cleanup Todo List
+
+- [ ] Steamline inference to one script call
+- [ ] Chat capability with model
+- [ ] Move training and inference data to HuggingFace datasets
+
+## Citation
+If you use our code, model, or dataset, please cite our paper!
+
+```
+@article{doris2025cad,
+  title={CAD-Coder: An Open-Source Vision-Language Model for Computer-Aided Design Code Generation},
+  author={Doris, Anna C and Alam, Md Ferdous and Nobari, Amin Heyrani and Ahmed, Faez},
+  journal={arXiv preprint arXiv:2505.14646},
+  year={2025}
+}
+```
+
+## Acknowledgements
+This repo is a fork of the [LLaVA repo](https://github.com/haotian-liu/LLaVA). We thank these authors for developing this model architecture and training strategy, which we have adapted for CAD-Coder.
+
+The authors gratefully acknowledge MIT-IBM for their partial support of this work. This material is based upon work supported by the National Science Foundation Graduate Research Fellowship. Any opinion, findings, and conclusions or recommendations expressed in this material are those of the authors(s) and do not necessarily reflect the views of the National Science Foundation.

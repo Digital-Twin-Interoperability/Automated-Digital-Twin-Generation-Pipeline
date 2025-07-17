@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CHECKPOINT_SAVE_DIR=$1
+STAGE1_SAVE_DIR=$1
 
 deepspeed llava/train/train_mem.py \
     --deepspeed ./scripts/zero2.json \
@@ -15,7 +15,7 @@ deepspeed llava/train/train_mem.py \
     --mm_use_im_start_end False \
     --mm_use_im_patch_token False \
     --bf16 True \
-    --output_dir ${CHECKPOINT_SAVE_DIR}/phase1_cadcoder \
+    --output_dir ${STAGE1_SAVE_DIR} \
     --num_train_epochs 1 \
     --per_device_train_batch_size 64 \
     --per_device_eval_batch_size 4 \
