@@ -5,13 +5,6 @@
 ## Overview
 **CAD-Coder generates CAD code (CadQuery Python) given an image input! Our model is a fine-tuned, open-source vision-langauge foundation model.** 
 
-On a test-set of CAD images, we demonstrate that CAD-Coder out-performs state-of-the-art closed-source and open-source code-generating VLMs both in terms of valid syntax rate of output Python scripts and generated solid accuracy.
-
-![CAD-Coder Results](docs_images/results.png)
-
-## Paper
-Our paper was accepted to IDETC 2025! Check out our pre-print [here](https://arxiv.org/abs/2505.14646).
-
 ## Dataset
 To learn more about our GenCAD-Code dataset, consisting of 163k image-CadQuery Python script pairs, check out our corresponding [GenCAD-Code dataset repo](https://github.com/anniedoris/GenCAD-Code).
 
@@ -80,11 +73,15 @@ The IoU results can be found in ```inference/inference_results/model_name/cadque
 
 Note: If instead of testing pre-trained CAD-Coder you want to test your own model, replace CADCODER/CAD-Coder in the above calls with a path to your own model
 
+TODO: Add capability/instructions for live chat with the model.
+
 ## Training CAD-Coder
 
 ### Phase 1 Training
 1. Activate the [llava](#llava-environment-setup) conda environment:
-```conda activate llava
+
+```
+conda activate llava
 ```
 
 2. Identify a location that is good to store a large quantity of data (~30GB) and export its absolute path as an environment variable:
