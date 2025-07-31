@@ -206,8 +206,7 @@ def process_3d(
 
     # output path
     os.makedirs("output", exist_ok=True)
-    # output_glb_path = f"output/partpacker_{datetime.now().strftime('%Y%m%d_%H%M%S')}.glb"
-
+    output_glb_path = f"output/partpacker_{datetime.now().strftime('%Y%m%d_%H%M%S')}.glb"
     # input image (assume processed to RGBA uint8)
     image = input_image.astype(np.float32) / 255.0
     image = image[..., :3] * image[..., 3:4] + (1 - image[..., 3:4])  # white background
@@ -278,22 +277,22 @@ def process_3d(
         # each component uses a random color
         part.visual.vertex_colors = get_random_color(j, use_float=True)
 
-    # mesh = trimesh.Scene(parts)
-    # # export the whole mesh
-    # mesh.export(output_glb_path)
-
-    # added 7/15/2025
+    # added 7/15/2025 by Jerome Ariola (2d1ff1cult)
     # 1. make a parts directory
     parts_dir = f"output/parts_{datetime.now():%Y%m%d_%H%M%S}"
     os.makedirs(parts_dir, exist_ok=True)
 
     # 2. export each part separately
     for j, part in enumerate(parts):
-        part_path = os.path.join(parts_dir, f"part_{j:03d}.ply")
+        part_path = os.path.join(parts_dir, f"part_{j:03d}.ply") # or ply
         part.export(part_path)
         print(f"Exported part {j} → {part_path}")
 
-    # return output_glb_path
+    mesh = trimesh.Scene(parts)
+    # # export the whole mesh
+    mesh.export(output_glb_path)
+
+    return output_glb_path
 
 
 # gradio UI
