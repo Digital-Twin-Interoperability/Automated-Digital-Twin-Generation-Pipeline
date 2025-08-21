@@ -4,6 +4,20 @@ __pycache__
 *.egg-info
 dist
 
+# Virtual Environments
+venv/
+cad_iou_env/
+cad_coder_env/
+env/
+.venv/
+.env/
+
+# Large files
+*.pyd
+*.dll
+*.so
+*.dylib
+
 # Log
 *.log
 *.log.*
