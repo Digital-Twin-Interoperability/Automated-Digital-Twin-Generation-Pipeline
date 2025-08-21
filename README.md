@@ -137,7 +137,24 @@ tensorboard --logdir=runs
 
 ![CAD-Coder Phase 2 Training](docs_images/finetune_results.png)
 
+## PartPacker Integration
 
+This repository also includes PartPacker functionality for efficient part-level 3D object generation via dual volume packing.
+
+### PartPacker Modifications
+1. `app.py` has been modified from the original repo to allow for output of multiple .ply files of each segmented mesh part, as opposed to a monolithic .glb
+2. Added `block.launch(share=True)`. Allows for sharing of a link to another person with inference performed on your local machine
+   - This is supposed to be done in the script `bootstrap.bat` in 2d1ff1cult/JPL-Su2025-2d3dgen, but has been removed since `app.py` here has already been modified
+
+### PartPacker Citation
+```
+@article{tang2024partpacker,
+  title={Efficient Part-level 3D Object Generation via Dual Volume Packing},
+  author={Tang, Jiaxiang and Lu, Ruijie and Li, Zhaoshuo and Hao, Zekun and Li, Xuan and Wei, Fangyin and Song, Shuran and Zeng, Gang and Liu, Ming-Yu and Lin, Tsung-Yi},
+  journal={arXiv preprint arXiv:2506.09980},
+  year={2025}
+}
+```
 
 ## Release Todo List
 
