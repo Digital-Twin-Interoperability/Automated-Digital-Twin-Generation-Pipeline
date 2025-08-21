@@ -22,17 +22,22 @@ def process_cad(args_tuple):
     """Function to write and run a single Python script."""
     code, id_, code_dir, stl_dir, step_dir, pc_dir_base, pc_reps, code_language = args_tuple
     
+    print(f"Processing {id_}...")
+    
     if "```python" in code:
         code = re.sub(r"```[a-zA-Z]*\n|```", "", code)
 
     # Checks if the code can be run, without any modifications. Checking for syntax errors
     file_path = f"{code_dir}/{id_}.py"
     write_python_file(code, file_path)
+    print(f"  Testing basic code execution for {id_}...")
     valid_code = run_python_script(file_path)
+    print(f"  Basic code execution result for {id_}: {valid_code}")
     
     valid_stl = False
     valid_pc = False
     if valid_code: # only move to stl generation if there is valid code
+        print(f"  Adding export code for {id_}...")
         # Adds code to generate stl, checks that STL is generated.
         if code_language == "pythonocc":
             code += f"\nwrite_stl_file(body, \"{stl_dir}/{id_}.stl\")"
@@ -43,20 +48,25 @@ def process_cad(args_tuple):
         else:
             raise TypeError("CAD code language not supported!")
         write_python_file(code, f"{code_dir}/{id_}.py")
+        print(f"  Testing STL generation for {id_}...")
         valid_stl = run_python_script(f"{code_dir}/{id_}.py")
+        print(f"  STL generation result for {id_}: {valid_stl}")
         if not wait_for_file(f"{stl_dir}/{id_}.stl"): # checks that the .stl was actually created, adds a little delay in case it's slow to save. #TODO implement this also for the python files generation?
             valid_stl = False
+            print(f"  STL file not found for {id_}")
             
         # Generate point clouds
         if valid_stl:
+            print(f"  Generating point clouds for {id_}...")
             for i in range(pc_reps):
                 try:
                     out_pc = convert_stl_to_point_cloud(f"{stl_dir}/{id_}.stl", f"{pc_dir_base}_{i}/{id_}.ply", 2000, seed=42+i)
                     if os.path.isfile(f"{pc_dir_base}_{i}/{id_}.ply"):
                         valid_pc = True # Only no errors and pc file exists should this be set to true
                 except Exception as e:
-                    print(f"{id_} failed point cloud generation")
+                    print(f"{id_} failed point cloud generation: {e}")
 
+    print(f"Completed processing {id_}: code={valid_code}, stl={valid_stl}, pc={valid_pc}")
     return valid_code, valid_stl, valid_pc, id_
 
 if __name__ == "__main__":
@@ -66,6 +76,7 @@ if __name__ == "__main__":
     parser.add_argument("--code_language", type=str, required=True, help="Name of code language, cadquery or pythonocc are currently supported")
     parser.add_argument("--pc_reps", type=int, required=True, help="Number of reps of point cloud generation.")
     parser.add_argument("--parallel", action="store_true", help="Run in parallel using multiple CPUs.")
+
 
     args = parser.parse_args()
     
@@ -111,6 +122,8 @@ if __name__ == "__main__":
     code_valid_rate = df["model_valid_code"].sum()/len(df)
     stl_valid_rate = df["model_valid_stl"].sum()/len(df)
     pc_valid_rate = df["model_valid_point_clouds"].sum()/len(df)
+    
+
     
     # Write stats to .txt file
     with open(ROOT_CHECKPOINT_DIR + f"/{model_name}/{args.dataset_name}/cad_gen_results.txt", "w", encoding="utf-8") as f:

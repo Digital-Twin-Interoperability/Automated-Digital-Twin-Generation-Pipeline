@@ -36,16 +36,23 @@ def write_python_file(file_content, py_path):
     return
 
 def run_python_script(py_path):
+    """Run Python script by importing and executing it directly instead of using subprocess"""
     try:
-        result = subprocess.run(
-            ["python", py_path],  # Use "python3" if needed
-            capture_output=True,      # Capture stdout and stderr
-            text=True,                # Decode output as text
-            check=True                # Raise an exception if the script fails
-        )
+        # Read the Python file
+        with open(py_path, 'r', encoding='utf-8') as f:
+            code = f.read()
+        
+        # Create a new namespace for execution
+        namespace = {}
+        
+        # Execute the code in the namespace
+        exec(code, namespace)
+        
         return True
-    except subprocess.CalledProcessError as e:
-        print("error:", e)
+    except Exception as e:
+        print(f"Direct execution error for {py_path}: {e}")
+        import traceback
+        traceback.print_exc()
         return False
     
 # Writing ply file, from GenCAD/Ferdous's repo
