@@ -1,7 +1,7 @@
 ,q_ids,model_valid_code,model_valid_stl,model_valid_point_clouds
-0,custom_003,True,True,True
-1,custom_004,True,True,True
+0,custom_004,True,True,True
+1,custom_003,True,True,True
 2,custom_006,True,True,True
 3,custom_001,True,True,True
-4,custom_002,True,True,True
-5,custom_005,True,True,True
+4,custom_005,True,True,True
+5,custom_002,True,True,True

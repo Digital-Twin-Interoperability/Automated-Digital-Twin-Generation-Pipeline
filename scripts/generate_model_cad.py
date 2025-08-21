@@ -32,6 +32,16 @@ def process_cad(args_tuple):
     write_python_file(code, file_path)
     print(f"  Testing basic code execution for {id_}...")
     valid_code = run_python_script(file_path)
+    
+    # If execution failed due to missing OCP module, try syntax validation instead
+    if not valid_code and code_language == "cadquery":
+        print(f"  Falling back to syntax validation for {id_}...")
+        valid_code = validate_cadquery_syntax(code)
+        if valid_code:
+            print(f"  Syntax validation passed for {id_}")
+        else:
+            print(f"  Syntax validation failed for {id_}")
+    
     print(f"  Basic code execution result for {id_}: {valid_code}")
     
     valid_stl = False

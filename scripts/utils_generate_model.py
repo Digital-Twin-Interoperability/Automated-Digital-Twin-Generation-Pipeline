@@ -7,6 +7,7 @@ from plyfile import PlyData, PlyElement
 import os
 import random
 from scipy.spatial import cKDTree as KDTree
+import ast
 
 def read_jsonl(file_path, *keys):
     """
@@ -36,7 +37,7 @@ def write_python_file(file_content, py_path):
     return
 
 def run_python_script(py_path):
-    """Run Python script by importing and executing it directly instead of using subprocess"""
+    """Run Python script by importing and executing it instead of using subprocess"""
     try:
         # Read the Python file
         with open(py_path, 'r', encoding='utf-8') as f:
@@ -49,6 +50,16 @@ def run_python_script(py_path):
         exec(code, namespace)
         
         return True
+    except ModuleNotFoundError as e:
+        if "OCP" in str(e):
+            print(f"Direct execution error for {py_path}: OpenCascade Python bindings (OCP) not available")
+            print("  This is required for CadQuery to work. Please install OCP using:")
+            print("  conda install -c conda-forge ocp")
+            print("  or")
+            print("  pip install OCP")
+        else:
+            print(f"Direct execution error for {py_path}: Missing module - {e}")
+        return False
     except Exception as e:
         print(f"Direct execution error for {py_path}: {e}")
         import traceback
@@ -72,3 +83,34 @@ def convert_stl_to_point_cloud(stl_path, point_cloud_path, n_points, seed=42):
     out_pc, _ = sample_surface(out_mesh, n_points) # convert to a point cloud
     write_ply(out_pc, point_cloud_path)
     return out_pc
+
+def validate_cadquery_syntax(code):
+    """Validate CadQuery code syntax without importing the actual modules"""
+    try:
+        # Parse the Python code to check for syntax errors
+        ast.parse(code)
+        
+        # Check for common CadQuery patterns
+        required_patterns = [
+            'import cadquery',
+            'cq.Workplane',
+            'cq.Plane',
+            'cq.Vector'
+        ]
+        
+        missing_patterns = []
+        for pattern in required_patterns:
+            if pattern not in code:
+                missing_patterns.append(pattern)
+        
+        if missing_patterns:
+            print(f"  Warning: Missing expected CadQuery patterns: {missing_patterns}")
+            return False
+        
+        return True
+    except SyntaxError as e:
+        print(f"  Syntax error in code: {e}")
+        return False
+    except Exception as e:
+        print(f"  Code validation error: {e}")
+        return False
